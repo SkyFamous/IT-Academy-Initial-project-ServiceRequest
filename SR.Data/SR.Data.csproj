@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EE123B72-3240-4636-A318-D9096EE285B2}</ProjectGuid>
+    <ProjectGuid>{A7F87B6D-AB49-4302-AA55-D5FE4AD737F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SR.Data</RootNamespace>
@@ -50,72 +50,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Category.cs">
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Company.cs">
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CompOffer.cs">
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CustOffer.cs">
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Customer.cs">
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
     <Compile Include="DBManager.cs" />
-    <Compile Include="Executor.cs">
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Offer.cs">
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
+    <Compile Include="SR.DB\AspNetRole.cs" />
+    <Compile Include="SR.DB\AspNetUser.cs" />
+    <Compile Include="SR.DB\AspNetUserClaim.cs" />
+    <Compile Include="SR.DB\AspNetUserLogin.cs" />
+    <Compile Include="SR.DB\Category.cs" />
+    <Compile Include="SR.DB\Company.cs" />
+    <Compile Include="SR.DB\CompOffer.cs" />
+    <Compile Include="SR.DB\CustOffer.cs" />
+    <Compile Include="SR.DB\Customer.cs" />
+    <Compile Include="SR.DB\Executor.cs" />
+    <Compile Include="SR.DB\Offer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SR.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SR.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SR.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SR.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SR.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SR.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="SRDBContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="SR.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SR.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="SR.edmx.diagram">
-      <DependentUpon>SR.edmx</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SR.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SR.Context.cs</LastGenOutput>
-      <DependentUpon>SR.edmx</DependentUpon>
-    </Content>
-    <Content Include="SR.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SR.edmx</DependentUpon>
-      <LastGenOutput>SR.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

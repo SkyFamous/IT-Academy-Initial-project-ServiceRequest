@@ -43,15 +43,5 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SR.Data\SR.Data.csproj">
-      <Project>{ee123b72-3240-4636-a318-d9096ee285b2}</Project>
-      <Name>SR.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SR.Web\SR.Web.csproj">
-      <Project>{c72fcdf0-3aed-4e06-bce6-b5e1d1aa9687}</Project>
-      <Name>SR.Web</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
