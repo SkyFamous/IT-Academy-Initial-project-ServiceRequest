@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using SR.Data;
 using System.Web.Mvc;
 using System.Web.Routing;
-using SR.Data;
 
 namespace SR.Web.Controllers
 {
