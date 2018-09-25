@@ -1,0 +1,22 @@
+﻿@using SR.Data;
+@model IEnumerable<Offer>
+@{
+    ViewBag.Title = "Choose offer";
+}
+
+<h2>Choose offer</h2>
+
+<div>
+    <table class="mainTables table-bordered table-striped">
+        <tr>
+            <th colspan="2"><p>Offers list</p></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width:auto"><p>@item.Name</p></td>
+                <td><p><a class="btn-default" href="/Home/ResultOfSearch/@item.Id">Choose offer</a></p></td>
+            </tr>
+        }
+    </table>
+</div>

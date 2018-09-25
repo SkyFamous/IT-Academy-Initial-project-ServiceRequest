@@ -1,0 +1,23 @@
+﻿@using SR.Data;
+@model IEnumerable<Executor>
+@{
+    ViewBag.Title = "ShowExecutors";
+}
+
+<h2>ShowExecutors</h2>
+
+<div>
+    <table class="mainTables table-bordered table-striped">
+        <tr>
+            <th colspan="2"><p>Companies list</p></th>
+        </tr>
+        @foreach (var i1 in Model)
+        {
+            <tr>
+                <td><p>@i1.Name</p></td>
+                <td><p>@i1.Surname</p></td>
+                <td><p>Phone Number:@i1.PhoneNumber</p></td>
+            </tr>
+        }
+    </table>
+</div>

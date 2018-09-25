@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="71e77242a7f5467f887e350bb2ae44e1" Name="Diagram1">
+        <EntityTypeShape EntityType="SRDBModel.Category" Width="1.5" PointX="0.75" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SRDBModel.Company" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SRDBModel.CompOffer" Width="1.5" PointX="5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SRDBModel.CustOffer" Width="1.5" PointX="5.375" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SRDBModel.Customer" Width="1.5" PointX="7.5" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SRDBModel.Executor" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SRDBModel.Offer" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <AssociationConnector Association="SRDBModel.FK_CategoriesOffers" ManuallyRouted="false" />
+        <AssociationConnector Association="SRDBModel.FK_CompaniesCompOffers" ManuallyRouted="false" />
+        <AssociationConnector Association="SRDBModel.FK_CompaniesExecutors" ManuallyRouted="false" />
+        <AssociationConnector Association="SRDBModel.FK_OffersCompOffers" ManuallyRouted="false" />
+        <AssociationConnector Association="SRDBModel.FK_CustOffersCustomers" ManuallyRouted="false" />
+        <AssociationConnector Association="SRDBModel.FK_CustOffersOffers" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
