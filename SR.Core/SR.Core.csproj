@@ -7,8 +7,8 @@
     <ProjectGuid>{15506B1A-A565-4677-8CF5-7EEC7007EC1C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServiceRequest</RootNamespace>
-    <AssemblyName>ServiceRequest</AssemblyName>
+    <RootNamespace>SR.Core</RootNamespace>
+    <AssemblyName>SR.Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

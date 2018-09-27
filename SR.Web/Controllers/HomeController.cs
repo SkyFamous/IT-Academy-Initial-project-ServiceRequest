@@ -1,11 +1,20 @@
 ﻿using SR.Data;
 using System.Web.Mvc;
 using System.Web.Routing;
+using SR.Data.Repositories;
+using System.Collections.Generic;
 
 namespace SR.Web.Controllers
 {
     public class HomeController : Controller
     {
+        UnitOfWork unitOfWork;
+
+        public HomeController()
+        {
+            unitOfWork = new UnitOfWork();
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -26,8 +35,7 @@ namespace SR.Web.Controllers
 
         public ActionResult ServiceRequest()
         {
-            DBManager db = new DBManager();
-            return View(db.GetAllCategories());
+            return View(unitOfWork.Categories.GetAll());
         }
 
         [HttpGet]
@@ -39,8 +47,7 @@ namespace SR.Web.Controllers
                     (new { controller = "Home", action = "Error", errorMessage = "Invalid id" }));
             }
 
-            DBManager db = new DBManager();
-            return View(db.GetAllOffers(offers => offers.CategoriesId == id));
+            return View(unitOfWork.Offers.GetAll(offers => offers.CategoriesId == id));
         }
 
         [HttpGet]
@@ -51,9 +58,7 @@ namespace SR.Web.Controllers
                 return RedirectToAction("Error", new RouteValueDictionary
                     (new { controller = "Home", action = "Error", errorMessage = "Invalid id" }));
             }
-
-            DBManager db = new DBManager();
-            return View(db.GetAllCompanies(id));
+            return View(unitOfWork.Companies.GetAll(companies => companies.Id == id));
         }
 
         [HttpGet]
@@ -65,8 +70,7 @@ namespace SR.Web.Controllers
                     (new { controller = "Home", action = "Error", errorMessage = "Invalid id" }));
             }
 
-            DBManager db = new DBManager();
-            return View(db.GetAllExecutors(executors => executors.CompaniesId == id));
+            return View(unitOfWork.Executors.GetAll(executors => executors.CompaniesId == id));
         }
 
         public ActionResult Error(string errorMessage)

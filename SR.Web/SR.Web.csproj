@@ -298,10 +298,6 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ServiceRequest\SR.Core.csproj">
-      <Project>{15506b1a-a565-4677-8cf5-7eec7007ec1c}</Project>
-      <Name>SR.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SR.Data\SR.Data.csproj">
       <Project>{a7f87b6d-ab49-4302-aa55-d5fe4ad737f7}</Project>
       <Name>SR.Data</Name>
