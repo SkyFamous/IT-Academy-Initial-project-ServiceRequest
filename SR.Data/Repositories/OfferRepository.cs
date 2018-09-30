@@ -17,9 +17,9 @@ namespace SR.Data.Repositories
 
         public IEnumerable<Offer> GetAll(Expression<Func<Offer, bool>> filter = null)
         {
-            IEnumerable<Offer> offers;
             using (SRDBContext db = new SRDBContext())
             {
+                IEnumerable<Offer> offers;
                 db.Configuration.ProxyCreationEnabled = false;
                 if (filter == null)
                 {

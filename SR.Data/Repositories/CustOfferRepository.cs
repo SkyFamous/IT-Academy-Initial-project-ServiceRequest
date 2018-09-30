@@ -17,9 +17,10 @@ namespace SR.Data.Repositories
 
         public IEnumerable<CustOffer> GetAll(Expression<Func<CustOffer, bool>> filter = null)
         {
-            IEnumerable<CustOffer> custOffers;
             using (SRDBContext db = new SRDBContext())
             {
+                IEnumerable<CustOffer> custOffers;
+                db.Configuration.ProxyCreationEnabled = false;
                 if (filter == null)
                 {
                     custOffers = db.CustOffers.ToList();
@@ -45,6 +46,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.CustOffers.Add(custOffer);
             }
         }
@@ -53,6 +55,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Entry(custOffer).State = EntityState.Modified;
             }
         }
@@ -61,6 +64,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 CustOffer custOffer = db.CustOffers.Find(id);
                 if (custOffer != null)
                     db.CustOffers.Remove(custOffer);

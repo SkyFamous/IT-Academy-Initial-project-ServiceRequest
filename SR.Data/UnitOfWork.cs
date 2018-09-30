@@ -11,7 +11,6 @@ namespace SR.Data
 {
     public class UnitOfWork
     {
-        private SRDBContext db = new SRDBContext();
         private CategoryRepository categoryRepository;
         private CompanyRepository companyRepository;
         private OfferRepository offerRepository;
@@ -92,20 +91,26 @@ namespace SR.Data
 
         public void Save()
         {
-            db.SaveChanges();
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.SaveChanges();
+            }
         }
 
         private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            using (SRDBContext db = new SRDBContext())
             {
-                if (disposing)
+                if (!this.disposed)
                 {
-                    db.Dispose();
+                    if (disposing)
+                    {
+                        db.Dispose();
+                    }
+                    this.disposed = true;
                 }
-                this.disposed = true;
             }
         }
 

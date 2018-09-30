@@ -17,9 +17,10 @@ namespace SR.Data.Repositories
 
         public IEnumerable<CompOffer> GetAll(Expression<Func<CompOffer, bool>> filter = null)
         {
-            IEnumerable<CompOffer> compOffers;
             using (SRDBContext db = new SRDBContext())
             {
+                IEnumerable<CompOffer> compOffers;
+                db.Configuration.ProxyCreationEnabled = false;
                 if (filter == null)
                 {
                     compOffers = db.CompOffers.ToList();
@@ -45,6 +46,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.CompOffers.Add(compOffer);
             }
         }
@@ -53,6 +55,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 return db.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId);
             }
         }
@@ -61,6 +64,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 if (!db.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId))
                 {
                     recordId = -1;
@@ -76,6 +80,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Entry(compOffer).State = EntityState.Modified;
             }
         }
@@ -84,6 +89,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 CompOffer compOffer = db.CompOffers.Find(id);
                 if (compOffer != null)
                     db.CompOffers.Remove(compOffer);

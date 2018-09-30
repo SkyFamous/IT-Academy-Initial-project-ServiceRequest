@@ -19,9 +19,10 @@ namespace SR.Data.Repositories
 
         public IEnumerable<Customer> GetAll(Expression<Func<Customer, bool>> filter = null)
         {
-            IEnumerable<Customer> customers;
             using (SRDBContext db = new SRDBContext())
             {
+                IEnumerable<Customer> customers;
+                db.Configuration.ProxyCreationEnabled = false;
                 if (filter == null)
                 {
                     customers = db.Customers.ToList();
@@ -47,6 +48,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Customers.Add(customer);
             }
         }
@@ -55,6 +57,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Entry(customer).State = EntityState.Modified;
             }
         }
@@ -63,6 +66,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 Customer customer = db.Customers.Find(id);
                 if (customer != null)
                     db.Customers.Remove(customer);

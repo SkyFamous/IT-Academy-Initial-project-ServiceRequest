@@ -18,9 +18,10 @@ namespace SR.Data.Repositories
 
         public IEnumerable<Executor> GetAll(Expression<Func<Executor, bool>> filter = null)
         {
-            IEnumerable<Executor> executors;
             using (SRDBContext db = new SRDBContext())
             {
+                IEnumerable<Executor> executors;
+                db.Configuration.ProxyCreationEnabled = false;
                 if (filter == null)
                 {
                     executors = db.Executors.ToList();
@@ -46,6 +47,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Executors.Add(executor);
             }
         }
@@ -54,6 +56,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Entry(executor).State = EntityState.Modified;
             }
         }
@@ -62,6 +65,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 Executor executor = db.Executors.Find(id);
                 if (executor != null)
                     db.Executors.Remove(executor);

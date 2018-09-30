@@ -20,6 +20,7 @@ namespace SR.Data.Repositories
             using (SRDBContext db = new SRDBContext())
             {
                 IEnumerable<Category> categories;
+                db.Configuration.ProxyCreationEnabled = false;
                 if (filter == null)
                 {
                     categories = db.Categories.ToList();
@@ -45,6 +46,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Categories.Add(category);
             }
         }
@@ -53,6 +55,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 db.Entry(category).State = EntityState.Modified;
             }
         }
@@ -61,6 +64,7 @@ namespace SR.Data.Repositories
         {
             using (SRDBContext db = new SRDBContext())
             {
+                db.Configuration.ProxyCreationEnabled = false;
                 Category category = db.Categories.Find(id);
                 if (category != null)
                     db.Categories.Remove(category);
