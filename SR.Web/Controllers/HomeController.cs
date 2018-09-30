@@ -109,7 +109,7 @@ namespace SR.Web.Controllers
         public ActionResult ShowOffers(OffersCollectionViewModel model)
         {
             System.Diagnostics.Debugger.Launch();
-            foreach(var item in model.OfferViewModels)
+            foreach (var item in model.OfferViewModels)
             {
                 if (item.IsProviding)
                 {

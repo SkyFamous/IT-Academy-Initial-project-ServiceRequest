@@ -71,6 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\IBaseRepository.cs" />
+    <Compile Include="Repositories\AspNetRoleRepository.cs" />
+    <Compile Include="Repositories\AspNetUserClaimRepository.cs" />
+    <Compile Include="Repositories\AspNetUserLoginRepository.cs" />
+    <Compile Include="Repositories\AspNetUserRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\CompanyRepository.cs" />
     <Compile Include="Repositories\CompOfferRepository.cs" />

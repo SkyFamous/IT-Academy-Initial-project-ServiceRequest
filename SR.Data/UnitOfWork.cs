@@ -18,6 +18,10 @@ namespace SR.Data
         private ExecutorRepository executorRepository;
         private CustOfferRepository custOfferRepository;
         private CompOfferRepository compOfferRepository;
+        private AspNetRoleRepository aspNetRoleRepository;
+        private AspNetUserClaimRepository aspNetUserClaimRepository;
+        private AspNetUserLoginRepository aspNetUserLoginRepository;
+        private AspNetUserRepository aspNetUserRepository;
 
 
         public CategoryRepository Categories
@@ -88,6 +92,47 @@ namespace SR.Data
                 return custOfferRepository;
             }
         }
+
+        public AspNetRoleRepository AspNetRoles
+        {
+            get
+            {
+                if (aspNetRoleRepository == null)
+                    aspNetRoleRepository = new AspNetRoleRepository();
+                return aspNetRoleRepository;
+            }
+        }
+
+        public AspNetUserClaimRepository AspNetUserClaims
+        {
+            get
+            {
+                if (aspNetUserClaimRepository == null)
+                    aspNetUserClaimRepository = new AspNetUserClaimRepository();
+                return aspNetUserClaimRepository;
+            }
+        }
+
+        public AspNetUserLoginRepository AspNetUserLogins
+        {
+            get
+            {
+                if (aspNetUserLoginRepository == null)
+                    aspNetUserLoginRepository = new AspNetUserLoginRepository();
+                return aspNetUserLoginRepository;
+            }
+        }
+
+        public AspNetUserRepository AspNetUsers
+        {
+            get
+            {
+                if (aspNetUserRepository == null)
+                    aspNetUserRepository = new AspNetUserRepository();
+                return aspNetUserRepository;
+            }
+        }
+
 
         public void Save()
         {
