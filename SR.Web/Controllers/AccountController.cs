@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using SR.Data;
+using SR.Model;
 
 namespace SR.Web.Controllers
 {
@@ -19,7 +21,7 @@ namespace SR.Web.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -31,9 +33,9 @@ namespace SR.Web.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -117,7 +119,7 @@ namespace SR.Web.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -131,10 +133,14 @@ namespace SR.Web.Controllers
             }
         }
 
-        //
-        // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult RegisterCustomer()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterCompanyAgent()
         {
             return View();
         }
@@ -144,71 +150,78 @@ namespace SR.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<ActionResult> RegisterCustomer(RegisterCustomerViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (UserManager.FindByEmail(model.Email) != null)
+                {
+                    ModelState.AddModelError("email", "Such email already exists!");
+                    return View(model);
+                }
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
+                var customer = new Customer { Name = model.NameOfUser, Surname = model.SurnameOfUser, PhoneNumber = model.PhoneNumber, UserId = user.Id };
+                UnitOfWork unitOfWork = new UnitOfWork();
+                unitOfWork.Customers.Create(customer);
+                unitOfWork.Save();
                 var result = await UserManager.CreateAsync(user, model.Password);
+                UserManager.AddToRole(user.Id, "customer");
                 if (result.Succeeded)
                 {
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action(
-                        "ConfirmEmail",
-                        "Account",
-                        new { userId = user.Id, code = code },
-                        protocol: Request.Url.Scheme);
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     EmailService emailService = new EmailService();
                     await emailService.SendAsync(model.Email, "Confirm your account",
                         $"Confirm registration , going to the link: <a href='{callbackUrl}'>link</a>");
 
                     // await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToLocal(returnUrl);
+
+                    return RedirectToAction("Login");
+                    //return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }
             return View(model);
         }
-        #region default method Register
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Register(RegisterViewModel model , string returnUrl = null)
-        //{
-        //    ViewData["ReturnUrl"] = returnUrl;
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        //        var result = await UserManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
 
-        //            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        //            var callbackUrl = Url.Action(
-        //                "ConfirmEmail",
-        //                "Account",
-        //                new { userId = user.Id, code = code },
-        //                protocol: HttpContext.Request.Scheme);
-        //            EmailService emailService = new EmailService();
-        //            await emailService.SendEmailAsync(model.Email, "Confirm your account",$"Confirm registration going to this link: <a href='{callbackUrl}'>link</a>");
-        //            //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterCompanyAgent(RegisterCompanyAgentViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                if (UserManager.FindByEmail(model.Email) != null)
+                {
+                    ModelState.AddModelError("email", "Such email already exists!");
+                    return View(model);
+                }
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
+                var company = new Company { Name = model.NameOfUser, Adress = model.Address, PhoneNumber = model.PhoneNumber, UserId = user.Id };
+                UnitOfWork unitOfWork = new UnitOfWork();
+                unitOfWork.Companies.Create(company);
+                unitOfWork.Save();
+                var result = await UserManager.CreateAsync(user, model.Password);
+                UserManager.AddToRole(user.Id, "company_agent");
+                if (result.Succeeded)
+                {
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    EmailService emailService = new EmailService();
+                    await emailService.SendAsync(model.Email, "Confirm your account",
+                        $"Confirm registration , going to the link: <a href='{callbackUrl}'>link</a>");
 
-        //            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-        //            // Send an email with this link
-        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    // await _signInManager.SignInAsync(user, isPersistent: false);
+                    //return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Login");
+                }
+                AddErrors(result);
+            }
+            return View(model);
+        }
 
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        AddErrors(result);
-        //    }
-
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
-        #endregion
         //
         // GET: /Account/ConfirmEmail
         [HttpGet]

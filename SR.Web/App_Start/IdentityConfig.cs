@@ -17,24 +17,24 @@ namespace SR.Web
 
         public async Task SendAsync(string email, string subject, string message)
         {
-            var emailMessage = new MimeMessage();
+            //var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Administration of web-site", "temporarilytemp115@gmail.com"));
-            emailMessage.To.Add(new MailboxAddress("", email));
-            emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-            {
-                Text = message
-            };
+            //emailMessage.From.Add(new MailboxAddress("Administration of web-site", "temporarilytemp115@gmail.com"));
+            //emailMessage.To.Add(new MailboxAddress("", email));
+            //emailMessage.Subject = subject;
+            //emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            //{
+            //    Text = message
+            //};
 
-            using (var client = new SmtpClient())
-            {
-                await client.ConnectAsync("smtp.gmail.com", 587, false);
-                await client.AuthenticateAsync("temporarilytemp115@gmail.com", "TempP@ss");
-                await client.SendAsync(emailMessage);
+            //using (var client = new SmtpClient())
+            //{
+            //    await client.ConnectAsync("smtp.gmail.com", 587, false);
+            //    await client.AuthenticateAsync("temporarilytemp115@gmail.com", "TempP@ss");
+            //    await client.SendAsync(emailMessage);
 
-                await client.DisconnectAsync(true);
-            }
+            //    await client.DisconnectAsync(true);
+            //}
             // Plug in your email service here to send an email.
             //return Task.FromResult(0);
         }

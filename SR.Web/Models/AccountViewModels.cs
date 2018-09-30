@@ -62,14 +62,14 @@ namespace SR.Web.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+    public class RegisterCustomerViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is required!")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is required!")]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -79,6 +79,49 @@ namespace SR.Web.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "{0} is required!")]
+        [Display(Name = "Name")]
+        public string NameOfUser { get; set; }
+
+        [Required(ErrorMessage = "{0} is required!")]
+        [Display(Name = "Surname")]
+        public string SurnameOfUser { get; set; }
+
+        [Required(ErrorMessage = "{0} is required!")]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
+    }
+
+    public class RegisterCompanyAgentViewModel
+    {
+        [Required(ErrorMessage = "{0} is required!")]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "{0} is required!")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "{0} is required!")]
+        [Display(Name = "Name")]
+        public string NameOfUser { get; set; }
+
+        [Required(ErrorMessage = "{0} is required!")]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "{0} is required!")]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
     }
 
     public class ResetPasswordViewModel

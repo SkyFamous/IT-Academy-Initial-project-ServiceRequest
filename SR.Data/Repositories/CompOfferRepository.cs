@@ -4,22 +4,21 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using SR.Model;
 
 namespace SR.Data.Repositories
 {
     public class CompOfferRepository : IBaseRepository<CompOffer>
     {
-        private SRDBContext db;
 
-        public CompOfferRepository(SRDBContext context)
+        public CompOfferRepository()
         {
-            this.db = context;
         }
 
         public IEnumerable<CompOffer> GetAll(Expression<Func<CompOffer, bool>> filter = null)
         {
             IEnumerable<CompOffer> compOffers;
-            using (db)
+            using (SRDBContext db = new SRDBContext())
             {
                 if (filter == null)
                 {
@@ -35,25 +34,60 @@ namespace SR.Data.Repositories
 
         public CompOffer Get(int? id)
         {
-            db.Configuration.ProxyCreationEnabled = false;
-            return db.CompOffers.Find(id);
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Configuration.ProxyCreationEnabled = false;
+                return db.CompOffers.Find(id);
+            }
         }
 
         public void Create(CompOffer compOffer)
         {
-            db.CompOffers.Add(compOffer);
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.CompOffers.Add(compOffer);
+            }
+        }
+
+        public bool IsProviding(int offerId, int companyId)
+        {
+            using (SRDBContext db = new SRDBContext())
+            {
+                return db.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId);
+            }
+        }
+
+        public bool IsProviding(int offerId, int companyId, out int recordId)
+        {
+            using (SRDBContext db = new SRDBContext())
+            {
+                if (!db.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId))
+                {
+                    recordId = -1;
+                    return false;
+                }
+                var record = db.CompOffers.First(cf => cf.CompaniesId == companyId && cf.OffersId == offerId);
+                recordId = record.Id;
+                return true;
+            }
         }
 
         public void Update(CompOffer compOffer)
         {
-            db.Entry(compOffer).State = EntityState.Modified;
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Entry(compOffer).State = EntityState.Modified;
+            }
         }
 
         public void Delete(int id)
         {
-            CompOffer compOffer = db.CompOffers.Find(id);
-            if (compOffer != null)
-                db.CompOffers.Remove(compOffer);
+            using (SRDBContext db = new SRDBContext())
+            {
+                CompOffer compOffer = db.CompOffers.Find(id);
+                if (compOffer != null)
+                    db.CompOffers.Remove(compOffer);
+            }
         }
     }
 }

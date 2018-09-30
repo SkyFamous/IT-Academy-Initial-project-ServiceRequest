@@ -6,22 +6,21 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using SR.Model;
 
 namespace SR.Data.Repositories
 {
     public class CustomerRepository : IBaseRepository<Customer>
     {
-        private SRDBContext db;
-
-        public CustomerRepository(SRDBContext context)
+        public CustomerRepository()
         {
-            this.db = context;
+
         }
 
         public IEnumerable<Customer> GetAll(Expression<Func<Customer, bool>> filter = null)
         {
             IEnumerable<Customer> customers;
-            using (db)
+            using (SRDBContext db = new SRDBContext())
             {
                 if (filter == null)
                 {
@@ -37,25 +36,37 @@ namespace SR.Data.Repositories
 
         public Customer Get(int? id)
         {
-            db.Configuration.ProxyCreationEnabled = false;
-            return db.Customers.Find(id);
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Configuration.ProxyCreationEnabled = false;
+                return db.Customers.Find(id);
+            }
         }
 
         public void Create(Customer customer)
         {
-            db.Customers.Add(customer);
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Customers.Add(customer);
+            }
         }
 
         public void Update(Customer customer)
         {
-            db.Entry(customer).State = EntityState.Modified;
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Entry(customer).State = EntityState.Modified;
+            }
         }
 
         public void Delete(int id)
         {
-            Customer customer = db.Customers.Find(id);
-            if (customer != null)
-                db.Customers.Remove(customer);
+            using (SRDBContext db = new SRDBContext())
+            {
+                Customer customer = db.Customers.Find(id);
+                if (customer != null)
+                    db.Customers.Remove(customer);
+            }
         }
     }
 }

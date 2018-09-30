@@ -1,0 +1,46 @@
+﻿@using SR.Web.Models;
+@model OffersCollectionViewModel
+
+@{
+    ViewBag.Title = "ShowOffers";
+}
+
+<h2>ShowOffers</h2>
+
+<div>
+    <form method="post" action="/Home/ShowOffers">
+        @Html.HiddenFor(m => m.CompanyId, Model.CompanyId)
+        <table class="mainTables table-bordered table-striped">
+            <tr>
+                <th colspan="1"><p>Offers list</p></th>
+                <th><p>Is providing</p></th>
+            </tr>
+            @for (int i = 0; i < Model.OfferViewModels.Count; i++)
+            {
+                @Html.HiddenFor(m => m.OfferViewModels[i].Offer.Id, Model.OfferViewModels[i].Offer.Id)
+
+                <tr>
+                    <td style="width:auto">
+                        @Html.LabelFor(m => m.OfferViewModels[i].Offer.Name, Model.OfferViewModels[i].Offer.Name, new { })
+                    </td>
+                    <td>
+                        @if (Model.OfferViewModels[i].IsProviding)
+                        {
+                            @Html.CheckBoxFor(m => m.OfferViewModels[i].IsProviding, new { @checked = "checked" })
+                        }
+                        else
+                        {
+                            @Html.CheckBoxFor(m => m.OfferViewModels[i].IsProviding)
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    </form>
+</div>
+

@@ -4,6 +4,7 @@ namespace SR.Data
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using SR.Model;
 
     public partial class SRDBContext : DbContext
     {

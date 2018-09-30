@@ -21,13 +21,12 @@ namespace SR.Data
         private CompOfferRepository compOfferRepository;
 
 
-
         public CategoryRepository Categories
         {
             get
             {
                 if (categoryRepository == null)
-                    categoryRepository = new CategoryRepository(db);
+                    categoryRepository = new CategoryRepository();
                 return categoryRepository;
             }
         }
@@ -37,7 +36,7 @@ namespace SR.Data
             get
             {
                 if (companyRepository == null)
-                    companyRepository = new CompanyRepository(db);
+                    companyRepository = new CompanyRepository();
                 return companyRepository;
             }
         }
@@ -47,7 +46,7 @@ namespace SR.Data
             get
             {
                 if (offerRepository == null)
-                    offerRepository = new OfferRepository(db);
+                    offerRepository = new OfferRepository();
                 return offerRepository;
             }
         }
@@ -57,7 +56,7 @@ namespace SR.Data
             get
             {
                 if (customerRepository == null)
-                    customerRepository = new CustomerRepository(db);
+                    customerRepository = new CustomerRepository();
                 return customerRepository;
             }
         }
@@ -67,7 +66,7 @@ namespace SR.Data
             get
             {
                 if (executorRepository == null)
-                    executorRepository = new ExecutorRepository(db);
+                    executorRepository = new ExecutorRepository();
                 return executorRepository;
             }
         }
@@ -77,7 +76,7 @@ namespace SR.Data
             get
             {
                 if (compOfferRepository == null)
-                    compOfferRepository = new CompOfferRepository(db);
+                    compOfferRepository = new CompOfferRepository();
                 return compOfferRepository;
             }
         }
@@ -86,7 +85,7 @@ namespace SR.Data
             get
             {
                 if (custOfferRepository == null)
-                    custOfferRepository = new CustOfferRepository(db);
+                    custOfferRepository = new CustOfferRepository();
                 return custOfferRepository;
             }
         }

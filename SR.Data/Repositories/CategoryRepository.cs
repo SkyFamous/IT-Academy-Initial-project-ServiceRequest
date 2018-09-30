@@ -4,23 +4,22 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using SR.Model;
 
 namespace SR.Data.Repositories
 {
     public class CategoryRepository : IBaseRepository<Category>
     {
-        private SRDBContext db;
-
-        public CategoryRepository(SRDBContext context)
+        public CategoryRepository()
         {
-            this.db = context;
+
         }
 
         public IEnumerable<Category> GetAll(Expression<Func<Category, bool>> filter = null)
         {
-            IEnumerable<Category> categories;
-            using (db)
+            using (SRDBContext db = new SRDBContext())
             {
+                IEnumerable<Category> categories;
                 if (filter == null)
                 {
                     categories = db.Categories.ToList();
@@ -35,25 +34,37 @@ namespace SR.Data.Repositories
 
         public Category Get(int? id)
         {
-            db.Configuration.ProxyCreationEnabled = false;
-            return db.Categories.Find(id);
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Configuration.ProxyCreationEnabled = false;
+                return db.Categories.Find(id);
+            }
         }
 
         public void Create(Category category)
         {
-            db.Categories.Add(category);
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Categories.Add(category);
+            }
         }
 
         public void Update(Category category)
         {
-            db.Entry(category).State = EntityState.Modified;
+            using (SRDBContext db = new SRDBContext())
+            {
+                db.Entry(category).State = EntityState.Modified;
+            }
         }
 
         public void Delete(int id)
         {
-            Category category = db.Categories.Find(id);
-            if (category != null)
-                db.Categories.Remove(category);
+            using (SRDBContext db = new SRDBContext())
+            {
+                Category category = db.Categories.Find(id);
+                if (category != null)
+                    db.Categories.Remove(category);
+            }
         }
     }
 }
