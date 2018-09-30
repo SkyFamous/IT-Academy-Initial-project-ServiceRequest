@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SR.Data;
-using SR.Data.Interface;
-using SR.Data.Repositories;
+﻿using SR.Data.Repositories;
+using System;
 
 namespace SR.Data
 {
     public class UnitOfWork
     {
+        private readonly SRDBContext db = new SRDBContext();
+
         private CategoryRepository categoryRepository;
         private CompanyRepository companyRepository;
         private OfferRepository offerRepository;
@@ -18,18 +14,18 @@ namespace SR.Data
         private ExecutorRepository executorRepository;
         private CustOfferRepository custOfferRepository;
         private CompOfferRepository compOfferRepository;
-        private AspNetRoleRepository aspNetRoleRepository;
-        private AspNetUserClaimRepository aspNetUserClaimRepository;
-        private AspNetUserLoginRepository aspNetUserLoginRepository;
-        private AspNetUserRepository aspNetUserRepository;
 
+        public UnitOfWork()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+        }
 
         public CategoryRepository Categories
         {
             get
             {
                 if (categoryRepository == null)
-                    categoryRepository = new CategoryRepository();
+                    categoryRepository = new CategoryRepository(db);
                 return categoryRepository;
             }
         }
@@ -39,7 +35,7 @@ namespace SR.Data
             get
             {
                 if (companyRepository == null)
-                    companyRepository = new CompanyRepository();
+                    companyRepository = new CompanyRepository(db);
                 return companyRepository;
             }
         }
@@ -49,7 +45,7 @@ namespace SR.Data
             get
             {
                 if (offerRepository == null)
-                    offerRepository = new OfferRepository();
+                    offerRepository = new OfferRepository(db);
                 return offerRepository;
             }
         }
@@ -59,7 +55,7 @@ namespace SR.Data
             get
             {
                 if (customerRepository == null)
-                    customerRepository = new CustomerRepository();
+                    customerRepository = new CustomerRepository(db);
                 return customerRepository;
             }
         }
@@ -69,7 +65,7 @@ namespace SR.Data
             get
             {
                 if (executorRepository == null)
-                    executorRepository = new ExecutorRepository();
+                    executorRepository = new ExecutorRepository(db);
                 return executorRepository;
             }
         }
@@ -79,7 +75,7 @@ namespace SR.Data
             get
             {
                 if (compOfferRepository == null)
-                    compOfferRepository = new CompOfferRepository();
+                    compOfferRepository = new CompOfferRepository(db);
                 return compOfferRepository;
             }
         }
@@ -88,74 +84,27 @@ namespace SR.Data
             get
             {
                 if (custOfferRepository == null)
-                    custOfferRepository = new CustOfferRepository();
+                    custOfferRepository = new CustOfferRepository(db);
                 return custOfferRepository;
             }
         }
 
-        public AspNetRoleRepository AspNetRoles
-        {
-            get
-            {
-                if (aspNetRoleRepository == null)
-                    aspNetRoleRepository = new AspNetRoleRepository();
-                return aspNetRoleRepository;
-            }
-        }
-
-        public AspNetUserClaimRepository AspNetUserClaims
-        {
-            get
-            {
-                if (aspNetUserClaimRepository == null)
-                    aspNetUserClaimRepository = new AspNetUserClaimRepository();
-                return aspNetUserClaimRepository;
-            }
-        }
-
-        public AspNetUserLoginRepository AspNetUserLogins
-        {
-            get
-            {
-                if (aspNetUserLoginRepository == null)
-                    aspNetUserLoginRepository = new AspNetUserLoginRepository();
-                return aspNetUserLoginRepository;
-            }
-        }
-
-        public AspNetUserRepository AspNetUsers
-        {
-            get
-            {
-                if (aspNetUserRepository == null)
-                    aspNetUserRepository = new AspNetUserRepository();
-                return aspNetUserRepository;
-            }
-        }
-
-
         public void Save()
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.SaveChanges();
-            }
+            db.SaveChanges();
         }
 
         private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {
-            using (SRDBContext db = new SRDBContext())
+            if (!this.disposed)
             {
-                if (!this.disposed)
+                if (disposing)
                 {
-                    if (disposing)
-                    {
-                        db.Dispose();
-                    }
-                    this.disposed = true;
+                    db.Dispose();
                 }
+                this.disposed = true;
             }
         }
 

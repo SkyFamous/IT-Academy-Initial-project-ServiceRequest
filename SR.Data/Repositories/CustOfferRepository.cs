@@ -10,65 +10,47 @@ namespace SR.Data.Repositories
 {
     public class CustOfferRepository : IBaseRepository<CustOffer>
     {
-        public CustOfferRepository()
-        {
+        private SRDBContext db;
 
+        public CustOfferRepository(SRDBContext db)
+        {
+            this.db = db;
         }
 
         public IEnumerable<CustOffer> GetAll(Expression<Func<CustOffer, bool>> filter = null)
         {
-            using (SRDBContext db = new SRDBContext())
+            IEnumerable<CustOffer> custOffers;
+            if (filter == null)
             {
-                IEnumerable<CustOffer> custOffers;
-                db.Configuration.ProxyCreationEnabled = false;
-                if (filter == null)
-                {
-                    custOffers = db.CustOffers.ToList();
-                }
-                else
-                {
-                    custOffers = db.CustOffers.Where(filter).ToList();
-                }
-                return custOffers;
+                custOffers = db.CustOffers.ToList();
             }
+            else
+            {
+                custOffers = db.CustOffers.Where(filter).ToList();
+            }
+            return custOffers;
         }
 
         public CustOffer Get(int? id)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                return db.CustOffers.Find(id);
-            }
+            return db.CustOffers.Find(id);
         }
 
         public void Create(CustOffer custOffer)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                db.CustOffers.Add(custOffer);
-            }
+            db.CustOffers.Add(custOffer);
         }
 
         public void Update(CustOffer custOffer)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                db.Entry(custOffer).State = EntityState.Modified;
-            }
+            db.Entry(custOffer).State = EntityState.Modified;
         }
 
         public void Delete(int id)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                CustOffer custOffer = db.CustOffers.Find(id);
-                if (custOffer != null)
-                    db.CustOffers.Remove(custOffer);
-            }
+            CustOffer custOffer = db.CustOffers.Find(id);
+            if (custOffer != null)
+                db.CustOffers.Remove(custOffer);
         }
     }
 }

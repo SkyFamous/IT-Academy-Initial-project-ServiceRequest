@@ -2,16 +2,18 @@
     ViewBag.Title = "Home Page";
 }
 
-<h2>Hello Customer!</h2>
 @if (User.Identity.IsAuthenticated && User.IsInRole("customer"))
 {
+    <h2>Hello Customer!</h2>
     @Html.ActionLink("Request service", "ServiceRequest", "Home", routeValues: null, htmlAttributes: new { });
 }
 else if ((User.Identity.IsAuthenticated && User.IsInRole("company_agent")))
 {
+    <h2>Hello Company Agent!</h2>
     @Html.ActionLink("Manage services", "ShowOffers", "Home", routeValues: null, htmlAttributes: new { });
 }
 else
 {
+    <h2>Hello!</h2>
     <h5>To use our web site you need to register.</h5>
 }

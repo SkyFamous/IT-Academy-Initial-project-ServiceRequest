@@ -10,65 +10,49 @@ namespace SR.Data.Repositories
 {
     public class CategoryRepository : IBaseRepository<Category>
     {
-        public CategoryRepository()
-        {
+        private SRDBContext db;
 
+        public CategoryRepository(SRDBContext db)
+        {
+            this.db = db;
         }
 
         public IEnumerable<Category> GetAll(Expression<Func<Category, bool>> filter = null)
         {
-            using (SRDBContext db = new SRDBContext())
+            IEnumerable<Category> categories;
+            if (filter == null)
             {
-                IEnumerable<Category> categories;
-                db.Configuration.ProxyCreationEnabled = false;
-                if (filter == null)
-                {
-                    categories = db.Categories.ToList();
-                }
-                else
-                {
-                    categories = db.Categories.Where(filter).ToList();
-                }
-                return categories;
+                categories = db.Categories.ToList();
             }
+            else
+            {
+                categories = db.Categories.Where(filter).ToList();
+            }
+            return categories;
+
         }
 
         public Category Get(int? id)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                return db.Categories.Find(id);
-            }
+            return db.Categories.Find(id);
+
         }
 
         public void Create(Category category)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                db.Categories.Add(category);
-            }
+            db.Categories.Add(category);
         }
 
         public void Update(Category category)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                db.Entry(category).State = EntityState.Modified;
-            }
+            db.Entry(category).State = EntityState.Modified;
         }
 
         public void Delete(int id)
         {
-            using (SRDBContext db = new SRDBContext())
-            {
-                db.Configuration.ProxyCreationEnabled = false;
-                Category category = db.Categories.Find(id);
-                if (category != null)
-                    db.Categories.Remove(category);
-            }
+            Category category = db.Categories.Find(id);
+            if (category != null)
+                db.Categories.Remove(category);
         }
     }
 }

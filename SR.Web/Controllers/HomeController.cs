@@ -1,20 +1,19 @@
-﻿using SR.Data;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using SR.Data;
+using SR.Model;
+using SR.Web.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using SR.Data.Repositories;
-using System.Collections.Generic;
-using Microsoft.AspNet.Identity;
-using System.Linq;
-using SR.Web.Models;
-using System.Web;
-using Microsoft.AspNet.Identity.Owin;
-using SR.Model;
 
 namespace SR.Web.Controllers
 {
     public class HomeController : Controller
     {
-        UnitOfWork unitOfWork;
+        private readonly UnitOfWork unitOfWork;
 
         public HomeController()
         {
@@ -108,7 +107,6 @@ namespace SR.Web.Controllers
         [HttpPost]
         public ActionResult ShowOffers(OffersCollectionViewModel model)
         {
-            System.Diagnostics.Debugger.Launch();
             foreach (var item in model.OfferViewModels)
             {
                 if (item.IsProviding)
@@ -129,6 +127,12 @@ namespace SR.Web.Controllers
             }
             unitOfWork.Save();
             return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            unitOfWork.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

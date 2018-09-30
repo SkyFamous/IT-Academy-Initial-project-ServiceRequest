@@ -1,11 +1,8 @@
+using SR.Model;
+using System.Data.Entity;
+
 namespace SR.Data
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-    using SR.Model;
-
     public partial class SRDBContext : DbContext
     {
         public SRDBContext()
