@@ -38,13 +38,13 @@ namespace SR.Web.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "customer")]
         public ActionResult ServiceRequest()
         {
             return View(unitOfWork.Categories.GetAll());
         }
 
-        [Authorize]
+        [Authorize(Roles = "customer")]
         [HttpGet]
         public ActionResult ChooseCategory(int? id)
         {
@@ -57,7 +57,7 @@ namespace SR.Web.Controllers
             return View(unitOfWork.Offers.GetAll(offers => offers.CategoriesId == id));
         }
 
-        [Authorize]
+        [Authorize(Roles = "customer")]
         [HttpGet]
         public ActionResult ResultOfSearch(int? id)
         {
@@ -88,7 +88,7 @@ namespace SR.Web.Controllers
             return View((object)errorMessage);
         }
 
-        [Authorize]
+        [Authorize(Roles = "company_agent")]
         public ActionResult ShowOffers()
         {
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -103,7 +103,7 @@ namespace SR.Web.Controllers
             return View(new OffersCollectionViewModel() { OfferViewModels = result, CompanyId = companyId });
         }
 
-        [Authorize]
+        [Authorize(Roles = "company_agent")]
         [HttpPost]
         public ActionResult ShowOffers(OffersCollectionViewModel model)
         {
