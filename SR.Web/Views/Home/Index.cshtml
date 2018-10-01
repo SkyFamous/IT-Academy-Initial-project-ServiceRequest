@@ -4,16 +4,16 @@
 
 @if (User.Identity.IsAuthenticated && User.IsInRole("customer"))
 {
-    <h2>Hello Customer!</h2>
-    @Html.ActionLink("Request service", "ServiceRequest", "Home", routeValues: null, htmlAttributes: new { });
+    <h1>Hello Customer!</h1>
+    <h3>@Html.ActionLink("Request service", "ServiceRequest", "Home", routeValues: null, htmlAttributes: new { })</h3>
 }
 else if ((User.Identity.IsAuthenticated && User.IsInRole("company_agent")))
 {
-    <h2>Hello Company Agent!</h2>
-    @Html.ActionLink("Manage services", "ShowOffers", "Home", routeValues: null, htmlAttributes: new { });
+    <h1>Hello Company Agent!</h1>
+    <h3>@Html.ActionLink("Manage services", "ShowOffers", "Home", routeValues: null, htmlAttributes: new { })</h3>
 }
 else
 {
-    <h2>Hello!</h2>
-    <h5>To use our web site you need to register.</h5>
+    <h1>Hello!</h1>
+    <h3>To use our web site you need to register.</h3>
 }
