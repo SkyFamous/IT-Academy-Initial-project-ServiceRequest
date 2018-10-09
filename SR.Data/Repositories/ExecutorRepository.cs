@@ -1,56 +1,18 @@
-﻿using SR.Data.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
-using SR.Model;
+using System.Text;
+using System.Threading.Tasks;
+using BAL.Models;
+using BAL.Repositories;
 
-namespace SR.Data.Repositories
+namespace DAL.Repositories
 {
-    public class ExecutorRepository : IBaseRepository<Executor>
+    public class ExecutorRepository : Repository<Executor>, IExecutorRepository
     {
-        private SRDBContext db;
-
-        public ExecutorRepository(SRDBContext db)
+        public ExecutorRepository(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-            this.db = db;
-        }
 
-        public IEnumerable<Executor> GetAll(Expression<Func<Executor, bool>> filter = null)
-        {
-            IEnumerable<Executor> executors;
-            if (filter == null)
-            {
-                executors = db.Executors.ToList();
-            }
-            else
-            {
-                executors = db.Executors.Where(filter).ToList();
-            }
-            return executors;
-        }
-
-        public Executor Get(int? id)
-        {
-            return db.Executors.Find(id);
-        }
-
-        public void Create(Executor executor)
-        {
-            db.Executors.Add(executor);
-        }
-
-        public void Update(Executor executor)
-        {
-            db.Entry(executor).State = EntityState.Modified;
-        }
-
-        public void Delete(int id)
-        {
-            Executor executor = db.Executors.Find(id);
-            if (executor != null)
-                db.Executors.Remove(executor);
         }
     }
 }

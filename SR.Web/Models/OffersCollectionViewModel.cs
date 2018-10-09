@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SR.Web.Models
+namespace Web.Models
 {
     public class OffersCollectionViewModel
     {

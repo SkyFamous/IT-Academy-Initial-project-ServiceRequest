@@ -1,7 +1,7 @@
-using SR.Model;
+using BAL.Models;
 using System.Data.Entity;
 
-namespace SR.Data
+namespace DAL
 {
     public partial class SRDBContext : DbContext
     {

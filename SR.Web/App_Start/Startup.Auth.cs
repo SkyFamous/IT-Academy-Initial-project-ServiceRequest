@@ -1,13 +1,12 @@
-﻿using System;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Google;
 using Owin;
-using SR.Web.Models;
+using System;
+using Web.Models;
 
-namespace SR.Web
+namespace Web
 {
     public partial class Startup
     {

@@ -1,0 +1,21 @@
+Companies:
+
+login : softwarecomp@swcomp.com
+password : TempP@ss1
+
+login : aniworldcomp@awcomp.com
+password : TempP@ss1
+
+login : carworldcomp@cwcomp.com
+password : TempP@ss1
+
+login : plantworldcomp@pwcomp.com
+password : TempP@ss1
+
+login : workworldcomp@wwcomp.com
+password : TempP@ss1
+
+Customers:
+
+login : golovaiko@gmail.com
+password : TempP@ss1

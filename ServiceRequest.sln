@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.Web", "SR.Web\SR.Web.csproj", "{C72FCDF0-3AED-4E06-BCE6-B5E1D1AA9687}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "SR.Web\Web.csproj", "{C72FCDF0-3AED-4E06-BCE6-B5E1D1AA9687}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.Data", "SR.Data\SR.Data.csproj", "{A7F87B6D-AB49-4302-AA55-D5FE4AD737F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "SR.Data\DAL.csproj", "{A7F87B6D-AB49-4302-AA55-D5FE4AD737F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.Model", "SR.Core\SR.Model.csproj", "{15506B1A-A565-4677-8CF5-7EEC7007EC1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BAL", "SR.Core\BAL.csproj", "{15506B1A-A565-4677-8CF5-7EEC7007EC1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

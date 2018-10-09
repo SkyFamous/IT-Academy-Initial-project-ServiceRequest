@@ -1,58 +1,18 @@
-﻿using SR.Data.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using SR.Model;
+using BAL.Models;
+using BAL.Repositories;
 
-namespace SR.Data.Repositories
+namespace DAL.Repositories
 {
-    public class CustomerRepository : IBaseRepository<Customer>
+    public class CustomerRepository : Repository<Customer>, ICustomerRepository
     {
-        private SRDBContext db;
-
-        public CustomerRepository(SRDBContext db)
+        public CustomerRepository(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-            this.db = db;
-        }
 
-        public IEnumerable<Customer> GetAll(Expression<Func<Customer, bool>> filter = null)
-        {
-            IEnumerable<Customer> customers;
-            if (filter == null)
-            {
-                customers = db.Customers.ToList();
-            }
-            else
-            {
-                customers = db.Customers.Where(filter).ToList();
-            }
-            return customers;
-        }
-
-        public Customer Get(int? id)
-        {
-            return db.Customers.Find(id);
-        }
-
-        public void Create(Customer customer)
-        {
-            db.Customers.Add(customer);
-        }
-
-        public void Update(Customer customer)
-        {
-            db.Entry(customer).State = EntityState.Modified;
-        }
-
-        public void Delete(int id)
-        {
-            Customer customer = db.Customers.Find(id);
-            if (customer != null)
-                db.Customers.Remove(customer);
         }
     }
 }

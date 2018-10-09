@@ -1,117 +1,24 @@
-﻿using SR.Data.Repositories;
-using System;
+﻿using BAL.Core;
 
-namespace SR.Data
+namespace DAL
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private readonly SRDBContext db = new SRDBContext();
+        public SRDBContext Context { get; set; }
 
-        private CategoryRepository categoryRepository;
-        private CompanyRepository companyRepository;
-        private OfferRepository offerRepository;
-        private CustomerRepository customerRepository;
-        private ExecutorRepository executorRepository;
-        private CustOfferRepository custOfferRepository;
-        private CompOfferRepository compOfferRepository;
-
-        public UnitOfWork()
+        public UnitOfWork(SRDBContext context)
         {
-            db.Configuration.ProxyCreationEnabled = false;
+            Context = context;
         }
 
-        public CategoryRepository Categories
+        public void SaveChanges ()
         {
-            get
-            {
-                if (categoryRepository == null)
-                    categoryRepository = new CategoryRepository(db);
-                return categoryRepository;
-            }
-        }
-
-        public CompanyRepository Companies
-        {
-            get
-            {
-                if (companyRepository == null)
-                    companyRepository = new CompanyRepository(db);
-                return companyRepository;
-            }
-        }
-
-        public OfferRepository Offers
-        {
-            get
-            {
-                if (offerRepository == null)
-                    offerRepository = new OfferRepository(db);
-                return offerRepository;
-            }
-        }
-
-        public CustomerRepository Customers
-        {
-            get
-            {
-                if (customerRepository == null)
-                    customerRepository = new CustomerRepository(db);
-                return customerRepository;
-            }
-        }
-
-        public ExecutorRepository Executors
-        {
-            get
-            {
-                if (executorRepository == null)
-                    executorRepository = new ExecutorRepository(db);
-                return executorRepository;
-            }
-        }
-
-        public CompOfferRepository CompOffers
-        {
-            get
-            {
-                if (compOfferRepository == null)
-                    compOfferRepository = new CompOfferRepository(db);
-                return compOfferRepository;
-            }
-        }
-        public CustOfferRepository CustOffers
-        {
-            get
-            {
-                if (custOfferRepository == null)
-                    custOfferRepository = new CustOfferRepository(db);
-                return custOfferRepository;
-            }
-        }
-
-        public void Save()
-        {
-            db.SaveChanges();
-        }
-
-        private bool disposed = false;
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    db.Dispose();
-                }
-                this.disposed = true;
-            }
+            Context.SaveChanges();
         }
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Context.Dispose();
         }
     }
 }

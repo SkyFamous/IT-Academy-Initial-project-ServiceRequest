@@ -1,23 +1,36 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using BAL.Models;
+using BAL.Repositories;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using SR.Data;
-using SR.Model;
-using SR.Web.Models;
+using Ninject;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Web.Models;
 
-namespace SR.Web.Controllers
+namespace Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly UnitOfWork unitOfWork;
+        private ICategoryRepository _categoryRepository;
+        private ICompanyRepository _companyRepository;
+        private IOfferRepository _offerRepository;
+        private ICompOfferRepository _compOfferRepository;
 
         public HomeController()
         {
-            unitOfWork = new UnitOfWork();
+
+        }
+
+        [Inject]
+        public HomeController(ICategoryRepository categoryRepository, ICompanyRepository companyRepository, IOfferRepository offerRepository, ICompOfferRepository compOfferRepository)
+        {
+            _categoryRepository = categoryRepository;
+            _companyRepository = companyRepository;
+            _offerRepository = offerRepository;
+            _compOfferRepository = compOfferRepository;
         }
 
         public ActionResult Index()
@@ -41,7 +54,7 @@ namespace SR.Web.Controllers
         [Authorize(Roles = "customer")]
         public ActionResult ServiceRequest()
         {
-            return View(unitOfWork.Categories.GetAll());
+            return View(_categoryRepository.GetAll());
         }
 
         [Authorize(Roles = "customer")]
@@ -54,7 +67,7 @@ namespace SR.Web.Controllers
                     (new { controller = "Home", action = "Error", errorMessage = "Invalid id" }));
             }
 
-            return View(unitOfWork.Offers.GetAll(offers => offers.CategoriesId == id));
+            return View(_offerRepository.GetAll(offers => offers.CategoriesId == id));
         }
 
         [Authorize(Roles = "customer")]
@@ -68,7 +81,7 @@ namespace SR.Web.Controllers
             }
 
 
-            return View(unitOfWork.Companies.GetCompaniesByOfferId(id));
+            return View(_companyRepository.GetCompaniesByOfferId(id));
         }
 
         //[HttpGet]
@@ -93,12 +106,12 @@ namespace SR.Web.Controllers
         {
             var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var currentUserId = userManager.FindByEmail(HttpContext.User.Identity.Name).Id;
-            var companyId = unitOfWork.Companies.GetAll(c => c.UserId == currentUserId).First().Id;
-            var offers = unitOfWork.Offers.GetAll();
+            var companyId = _companyRepository.GetAll(c => c.UserId == currentUserId).First().Id;
+            var offers = _offerRepository.GetAll();
             List<OfferViewModel> result = new List<OfferViewModel>();
             foreach (var item in offers)
             {
-                result.Add(new OfferViewModel() { Offer = item, IsProviding = unitOfWork.CompOffers.IsProviding(item.Id, companyId) });
+                result.Add(new OfferViewModel() { Offer = item, IsProviding = _compOfferRepository.IsProviding(item.Id, companyId) });
             }
             return View(new OffersCollectionViewModel() { OfferViewModels = result, CompanyId = companyId });
         }
@@ -111,28 +124,22 @@ namespace SR.Web.Controllers
             {
                 if (item.IsProviding)
                 {
-                    if (!unitOfWork.CompOffers.IsProviding(item.Offer.Id, model.CompanyId))
+                    if (!_compOfferRepository.IsProviding(item.Offer.Id, model.CompanyId))
                     {
-                        unitOfWork.CompOffers.Create(new CompOffer() { OffersId = item.Offer.Id, CompaniesId = model.CompanyId });
+                        _compOfferRepository.Create(new CompOffer() { OffersId = item.Offer.Id, CompaniesId = model.CompanyId });
                     }
                 }
                 else
                 {
-                    int id;
-                    if (unitOfWork.CompOffers.IsProviding(item.Offer.Id, model.CompanyId, out id))
+                    CompOffer id;
+                    if (_compOfferRepository.IsProviding(item.Offer.Id, model.CompanyId, out id))
                     {
-                        unitOfWork.CompOffers.Delete(id);
+                        _compOfferRepository.Delete(id);
                     }
                 }
             }
-            unitOfWork.Save();
+            _categoryRepository.SaveChanges();
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            unitOfWork.Dispose();
-            base.Dispose(disposing);
         }
     }
 }

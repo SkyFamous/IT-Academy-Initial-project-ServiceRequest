@@ -1,24 +1,35 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using BAL.Models;
+using BAL.Services;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using SR.Web.Models;
+using Ninject;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using SR.Data;
-using SR.Model;
+using Web.Models;
 
-namespace SR.Web.Controllers
+namespace Web.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly ICustomerService _customerService;
+        private readonly ICompanyService _companyService;
 
         public AccountController()
         {
+
+        }
+
+        [Inject]
+        public AccountController(ICustomerService customerService, ICompanyService companyService)
+        {
+            _companyService = companyService;
+            _customerService = customerService;
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -67,10 +78,27 @@ namespace SR.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToLocal("Home/Index");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            // Require the user to have a confirmed email before they can log on.
+            //var user = await UserManager.FindByNameAsync(model.Email);
+            //if (user != null)
+            //{
+            //    if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+            //    {
+            //        ViewBag.errorMessage = "You must have a confirmed email to log on.";
+            //        return View("Error");
+            //    }
+            //}
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
@@ -133,12 +161,14 @@ namespace SR.Web.Controllers
             }
         }
 
+        // GET: /Account/RegisterCompanyAgent
         [AllowAnonymous]
         public ActionResult RegisterCustomer()
         {
             return View();
         }
 
+        // GET: /Account/RegisterCompanyAgent
         [AllowAnonymous]
         public ActionResult RegisterCompanyAgent()
         {
@@ -146,7 +176,7 @@ namespace SR.Web.Controllers
         }
 
         //
-        // POST: /Account/Register
+        // POST: /Account/RegisterCustomer
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -160,23 +190,34 @@ namespace SR.Web.Controllers
                     ModelState.AddModelError("email", "Such email already exists!");
                     return View(model);
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
-                var customer = new Customer { Name = model.NameOfUser, Surname = model.SurnameOfUser, PhoneNumber = model.PhoneNumber, UserId = user.Id };
-                UnitOfWork unitOfWork = new UnitOfWork();
-                unitOfWork.Customers.Create(customer);
-                unitOfWork.Save();
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+                var customer = new Customer
+                {
+                    Name = model.NameOfUser,
+                    Surname = model.SurnameOfUser,
+                    PhoneNumber = model.PhoneNumber,
+                    UserId = user.Id
+                };
+
+                _customerService.CreateCustomer(customer);
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 UserManager.AddToRole(user.Id, "customer");
+
                 if (result.Succeeded)
                 {
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     EmailService emailService = new EmailService();
-                    await emailService.SendAsync(model.Email, "Confirm your account",
-                        $"Confirm registration , going to the link: <a href='{callbackUrl}'>link</a>");
-
+                    await emailService.SendAsync(model.Email, "Confirm your account", $"Confirm registration , going to the link: <a href='{callbackUrl}'>link</a>");
                     // await _signInManager.SignInAsync(user, isPersistent: false);
-
                     return RedirectToAction("Login");
                     //return RedirectToLocal(returnUrl);
                 }
@@ -185,6 +226,7 @@ namespace SR.Web.Controllers
             return View(model);
         }
 
+        // POST: /Account/RegisterCustomer
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -198,13 +240,27 @@ namespace SR.Web.Controllers
                     ModelState.AddModelError("email", "Such email already exists!");
                     return View(model);
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber };
-                var company = new Company { Name = model.NameOfUser, Adress = model.Address, PhoneNumber = model.PhoneNumber, UserId = user.Id };
-                UnitOfWork unitOfWork = new UnitOfWork();
-                unitOfWork.Companies.Create(company);
-                unitOfWork.Save();
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+                var company = new Company
+                {
+                    Name = model.NameOfUser,
+                    Adress = model.Address,
+                    PhoneNumber = model.PhoneNumber,
+                    UserId = user.Id
+                };
+
+                _companyService.CreateCompany(company);
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 UserManager.AddToRole(user.Id, "company_agent");
+
                 if (result.Succeeded)
                 {
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

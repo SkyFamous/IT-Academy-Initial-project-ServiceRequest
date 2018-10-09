@@ -1,4 +1,4 @@
-namespace SR.Model
+namespace BAL.Models
 {
     public partial class CompOffer
     {

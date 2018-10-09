@@ -1,5 +1,6 @@
-﻿using SR.Model;
-namespace SR.Web.Models
+﻿using BAL.Models;
+
+namespace Web.Models
 {
     public class OfferViewModel
     {

@@ -1,20 +1,17 @@
-﻿using MailKit.Net.Smtp;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using MimeKit;
-using SR.Web.Models;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Web.Models;
 
-namespace SR.Web
+namespace Web
 {
     public class EmailService //: IIdentityMessageService
     {
-
         public async Task SendAsync(string email, string subject, string message)
         {
             //var emailMessage = new MimeMessage();

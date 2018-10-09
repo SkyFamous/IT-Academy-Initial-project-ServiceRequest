@@ -1,4 +1,4 @@
-namespace SR.Model
+namespace BAL.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;

@@ -1,75 +1,34 @@
-﻿using SR.Data.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
-using SR.Model;
+using System.Text;
+using System.Threading.Tasks;
+using BAL.Models;
+using BAL.Repositories;
 
-namespace SR.Data.Repositories
+namespace DAL.Repositories
 {
-    public class CompOfferRepository : IBaseRepository<CompOffer>
+    public class CompOfferRepository : Repository<CompOffer>, ICompOfferRepository
     {
-        private readonly SRDBContext db;
-
-        public CompOfferRepository(SRDBContext db)
+        public CompOfferRepository(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-            this.db = db;
-        }
 
-        public IEnumerable<CompOffer> GetAll(Expression<Func<CompOffer, bool>> filter = null)
-        {
-            IEnumerable<CompOffer> compOffers;
-            if (filter == null)
-            {
-                compOffers = db.CompOffers.ToList();
-            }
-            else
-            {
-                compOffers = db.CompOffers.Where(filter).ToList();
-            }
-            return compOffers;
-        }
-
-        public CompOffer Get(int? id)
-        {
-            return db.CompOffers.Find(id);
-        }
-
-        public void Create(CompOffer compOffer)
-        {
-            db.CompOffers.Add(compOffer);
         }
 
         public bool IsProviding(int offerId, int companyId)
         {
-            return db.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId);
+            return unitOfWork.Context.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId);
         }
 
-        public bool IsProviding(int offerId, int companyId, out int recordId)
+        public bool IsProviding(int offerId, int companyId, out CompOffer recordId)
         {
-            if (!db.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId))
+            if (!unitOfWork.Context.CompOffers.Any(cf => cf.CompaniesId == companyId && cf.OffersId == offerId))
             {
-                recordId = -1;
+                recordId = new CompOffer { Id = -1 };
                 return false;
             }
-            var record = db.CompOffers.First(cf => cf.CompaniesId == companyId && cf.OffersId == offerId);
-            recordId = record.Id;
+            recordId = unitOfWork.Context.CompOffers.First(cf => cf.CompaniesId == companyId && cf.OffersId == offerId); ;
             return true;
-        }
-
-        public void Update(CompOffer compOffer)
-        {
-            db.Entry(compOffer).State = EntityState.Modified;
-
-        }
-
-        public void Delete(int id)
-        {
-            CompOffer compOffer = db.CompOffers.Find(id);
-            if (compOffer != null)
-                db.CompOffers.Remove(compOffer);
-
         }
     }
 }

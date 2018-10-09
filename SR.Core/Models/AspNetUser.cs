@@ -1,4 +1,4 @@
-namespace SR.Model
+namespace BAL.Models
 {
     using System;
     using System.Collections.Generic;
