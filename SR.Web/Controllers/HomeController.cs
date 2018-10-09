@@ -84,18 +84,6 @@ namespace Web.Controllers
             return View(_companyRepository.GetCompaniesByOfferId(id));
         }
 
-        //[HttpGet]
-        //public ActionResult ShowExecutors(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return RedirectToAction("Error", new RouteValueDictionary
-        //            (new { controller = "Home", action = "Error", errorMessage = "Invalid id" }));
-        //    }
-
-        //    return View(unitOfWork.Executors.GetAll(executors => executors.CompaniesId == id));
-        //}
-
         public ActionResult Error(string errorMessage)
         {
             return View((object)errorMessage);
